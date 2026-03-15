@@ -23,7 +23,7 @@ class LRU_Cache<K, V> implements SimpleCache<K, V> {
     public void put(K key, V value) {
 
         if (hashedLinkedList.getNodeLocatorMap().size() >= MAX_CACHE_SIZE) {
-            hashedLinkedList
+           // hashedLinkedList
         }
         hashedLinkedList.addOnFront(key, value);
 

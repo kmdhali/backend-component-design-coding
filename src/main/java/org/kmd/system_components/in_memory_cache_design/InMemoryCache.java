@@ -1,5 +1,6 @@
 package org.kmd.system_components.in_memory_cache_design;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 class InMemoryCache<K, V> implements SimpleCache<K, V> {
@@ -48,6 +49,31 @@ class InMemoryCache<K, V> implements SimpleCache<K, V> {
         }
     }
 
+    /**
+     * Implementation with Java 8 Optional
+     */
+
+    @Override
+    public Optional<V> get_2(K key) {
+
+        CacheEntry<V> vCacheEntry = this.cacheEntries.get(key);
+
+        if (vCacheEntry != null) {
+            if (!vCacheEntry.isExpired()) {
+
+                V cacheVal = vCacheEntry.getValue();
+                return Optional.of(cacheVal);
+            } else {
+                return Optional.empty();
+
+            }
+        } else {
+            System.out.printf("The key %s does nit exists in cache", key);
+            return Optional.empty();
+        }
+    }
+
+
     public static void main(String[] args) throws InterruptedException {
 
         SimpleCache<String, String> cache = new InMemoryCache<>();
@@ -59,6 +85,19 @@ class InMemoryCache<K, V> implements SimpleCache<K, V> {
         cache.get("kmd");
         cache.get("xxx");
 
+        /* Using Optional */
+        Optional<String> value = cache.get_2("kmd");
+        if (value.isPresent()) {
+            System.out.printf("The key kmd is present, value = %s", value.get());
+        }else{
+            System.out.println("the key kmd does not exists ");
+        }
+
+        //Another way to use , use a conusmer
+
+        System.out.println("\nanother test");
+        Optional<String> value1 = cache.get_2("kmd");
+        value1.ifPresent(System.out::println);
     }
 
 }
